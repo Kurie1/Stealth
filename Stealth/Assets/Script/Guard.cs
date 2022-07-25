@@ -8,9 +8,20 @@ public class Guard : MonoBehaviour
     public float Speed = 5f;
     public float WaitTime = 2f;
     public float turnSpeed = 90f;
+    public Light spotlight;
+    public float viewDistance;
+    public LayerMask viewMask;
 
+
+    private float viewAngle;
+    private Transform player;
+    private Color originalSpotlightColour;
     private void Start()
     {
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+        viewAngle = spotlight.spotAngle;
+        originalSpotlightColour = spotlight.color;
+
         Vector3[] wayPoints = new Vector3[pathHolder.childCount];
         for(int i = 0; i < wayPoints.Length; i++)
         {
@@ -18,6 +29,36 @@ public class Guard : MonoBehaviour
         }
         StartCoroutine(FollowPath(wayPoints));
        
+    }
+    private void Update()
+    {
+        if (CanSeePlayer())
+        {
+            spotlight.color = Color.red;
+        }
+        else 
+        {
+            spotlight.color = originalSpotlightColour;
+        }
+
+    }
+
+    private bool CanSeePlayer()
+    {
+        if (Vector3.Distance(transform.position, player.position) < viewDistance)
+        {
+            Vector3 dirToPlayer = (player.position - transform.position).normalized;
+            float angleBetweenGuardAndPlayer = Vector3.Angle(transform.forward, dirToPlayer);
+            if (angleBetweenGuardAndPlayer < viewAngle / 2)
+            {
+                if (!Physics.Linecast(transform.position, player.position, viewMask))
+                {
+                    return true;
+                }
+            }
+
+        }
+        return false;
     }
 
     private IEnumerator FollowPath(Vector3[] waypoints)
@@ -46,8 +87,8 @@ public class Guard : MonoBehaviour
         float counter = 0;
         while (transform.forward != dirToLookTarget)
         {
-            transform.forward = Vector3.Lerp(transform.forward, dirToLookTarget, counter/turnSpeed);
-            counter += Time.deltaTime;
+            transform.forward = Vector3.Lerp(transform.forward, dirToLookTarget, counter/turnSpeed); //45
+            counter += Time.deltaTime; // 45
             yield return null;
         }
 
@@ -65,6 +106,9 @@ public class Guard : MonoBehaviour
             previousPosition = waypoint.position;
         }
         Gizmos.DrawLine(previousPosition, startPosition);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(transform.position, transform.forward * viewDistance);
     }
     // Start is called before the first frame update
 
