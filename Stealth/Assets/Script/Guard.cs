@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Guard : MonoBehaviour
 {
+    
     public Transform pathHolder;
     public float Speed = 5f;
     public float WaitTime = 2f;
@@ -11,8 +13,10 @@ public class Guard : MonoBehaviour
     public Light spotlight;
     public float viewDistance;
     public LayerMask viewMask;
+    public float TimeToSpotPlayer = .5f;
+    public Action OnGuardHasSpottedPlayer;
 
-
+    private float playerVisibleTimer;
     private float viewAngle;
     private Transform player;
     private Color originalSpotlightColour;
@@ -34,13 +38,22 @@ public class Guard : MonoBehaviour
     {
         if (CanSeePlayer())
         {
-            spotlight.color = Color.red;
+            playerVisibleTimer += Time.deltaTime;
         }
         else 
         {
-            spotlight.color = originalSpotlightColour;
+            playerVisibleTimer -= Time.deltaTime;
         }
+        playerVisibleTimer = Mathf.Clamp(playerVisibleTimer, 0, TimeToSpotPlayer);
+        spotlight.color = Color.Lerp(originalSpotlightColour, Color.red, playerVisibleTimer / TimeToSpotPlayer);
 
+        if (playerVisibleTimer >= TimeToSpotPlayer)
+        {
+            if (OnGuardHasSpottedPlayer == null)
+            {
+                OnGuardHasSpottedPlayer?.Invoke();
+            }
+        }
     }
 
     private bool CanSeePlayer()

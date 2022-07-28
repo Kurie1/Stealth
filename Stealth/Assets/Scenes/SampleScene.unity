@@ -208,6 +208,7 @@ MonoBehaviour:
   viewMask:
     serializedVersion: 2
     m_Bits: 64
+  TimeToSpotPlayer: 0.5
 --- !u!1 &355201836
 GameObject:
   m_ObjectHideFlags: 0
@@ -275,6 +276,7 @@ MonoBehaviour:
   moveSpeed: 7
   smoothMoveTime: 0.1
   turnSpeed: 8
+  GuardSrcipt: {fileID: 0}
 --- !u!65 &461701967
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -665,7 +667,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.83, z: 0}
+  m_LocalPosition: {x: 1.71, y: 0.83, z: -0.62}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -824,7 +826,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1223400652}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.77, y: 2.52, z: 21.43}
+  m_LocalPosition: {x: 6.77, y: 2.52, z: 15.2}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
